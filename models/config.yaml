@@ -1,0 +1,61 @@
+datasets:
+  eval:
+    dataset:
+      data_root:
+      - /store/lixumin/xizhi_OCR/mathpix_pdf_data/data/images
+      equations: /store/lixumin/xizhi_OCR/mathpix_pdf_data/data/mini.txt
+    shuffle: false
+  train:
+    batch_size: 16
+    collate_fn:
+      debug: false
+      type: NougatPadFixSizeCollectFn
+    dataset:
+      data_root:
+      - /store/lixumin/xizhi_OCR/mathpix_pdf_data/data/images
+      equations: /store/lixumin/xizhi_OCR/mathpix_pdf_data/data/train_v2.txt
+      type: NougatDataset
+    num_workers: 10
+    shuffle: true
+device:
+  allow_tf32: true
+model:
+  image_size:
+  - 224
+  - 560
+  max_length: 384
+  mixed_precision: fp16
+  model_path: null
+  pretrained_model_name_or_path: /home/lixumin/project/xizhi_OCR/nougat-latex-ocr/small_model
+  processor_args:
+    img_processor_args:
+      do_crop_margin: false
+  quantization_type: ''
+  type: VisionEncoderDecoderModel
+name: nougat-small
+phase: train
+trainer:
+  ema_include: []
+  epochs: 20
+  grad_accumulate: 1
+  grad_clip: 3.0
+  optimizer:
+    beta1: 0.9
+    beta2: 0.98
+    eps: 1.0e-06
+    lr: 2.0e-05
+    optimizer_type: adamw
+    weight_decay: 0.05
+  print_freq: 20
+  random_seed: null
+  resume_flag: false
+  save_dir: /store/lixumin/xizhi_OCR/nougat_ocr/workspace/latex_ocr_small_1124
+  save_epoch_freq: 1
+  save_step_freq: 20000
+  scheduler:
+    scheduler_type: cosine
+    warmup_epochs: 0
+    warmup_steps: 500
+  start_global_step: -1
+  tensorboard_dir: /store/lixumin/xizhi_OCR/nougat_ocr/workspace/latex_ocr_small_1124/tensorboard
+  use_ema: false
