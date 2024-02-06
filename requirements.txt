@@ -9,3 +9,5 @@ uvicorn==0.23.2
 pillow==9.2.0
 
 cairosvg==2.7.1
+
+git+https://github.com/lixumin-zai/streamlit_paste_clipboard.git

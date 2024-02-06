@@ -1,4 +1,4 @@
 [theme]
-base="dark"
+base="white"
 [server]
-port = 12345
+port = 12346

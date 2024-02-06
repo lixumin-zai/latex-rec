@@ -439,6 +439,7 @@ class NougatImageProcessor(BaseImageProcessor):
         image_mean = image_mean if image_mean is not None else self.image_mean
         image_std = image_std if image_std is not None else self.image_std
 
+        # print([i.size for i in images])
         images = make_list_of_images(images)
 
         if not valid_images(images):
@@ -461,7 +462,7 @@ class NougatImageProcessor(BaseImageProcessor):
 
         # All transformations expect numpy arrays.
         images = [to_numpy_array(image) for image in images]
-
+        # print([i.shape for i in images])
         if is_scaled_image(images[0]) and do_rescale:
             logger.warning_once(
                 "It looks like you are trying to rescale already rescaled images. If the input"
@@ -505,6 +506,7 @@ class NougatImageProcessor(BaseImageProcessor):
         images = [
             to_channel_dimension_format(image, data_format, input_channel_dim=input_data_format) for image in images
         ]
-
+        # print([i.shape for i in images])
+        # print(1)
         data = {"pixel_values": images}
         return BatchFeature(data=data, tensor_type=return_tensors)

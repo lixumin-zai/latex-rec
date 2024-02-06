@@ -6,6 +6,8 @@ import requests
 import json
 import time
 from streamlit_image_select import image_select
+from streamlit_paste_clipboard import paste_clipboard
+
 
 def render_svg(svg):
     """Renders the given svg string."""
@@ -28,9 +30,12 @@ example_image = image_select("example点击或上传图片:", [
     ]
 )
 
-
-uploaded_file = st.file_uploader("", type=["png", "jpg", "jpeg"], accept_multiple_files=False)
-st.caption('仅支持上传png、jpg、jpeg，svg使用API调用')
+colu1, colu2 = st.columns(2)
+with colu1:
+    paste_image = paste_clipboard()
+with colu2:
+    uploaded_file = st.file_uploader("", type=["png", "jpg", "jpeg"], accept_multiple_files=False)
+    st.caption('仅支持上传png、jpg、jpeg，svg使用API调用')
 
 col1, col2 = st.columns(2)
 # st.write(bytes_data)
@@ -48,6 +53,10 @@ with col1:
             # else:
             image = Image.open(uploaded_file)
             uploaded_file = None
+        if paste_image is not None:
+            image = paste_image
+            paste_image = None
+            uploaded_file = None
         st.image(image, caption="上传的图片:", width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
         img_byte_arr = BytesIO()
         image.save(img_byte_arr, format='PNG') 
@@ -60,10 +69,11 @@ with col1:
         result = requests.post(url, json=data)
         toc = time.time()
         st.write(f"cost time:{toc-tic:05f}s")
-        latex = result.json()["latex_texts"][0].replace("$", " $   ")
+        latex = result.json()["latex_texts"][0].replace("$", " $ ")
         example_image = None
+        uploaded_file = None
 
-
+# latex = 
 with col2:
     if latex:
         print(latex)
@@ -74,7 +84,7 @@ if latex:
     st.code(latex)
 st.divider()
 example_image = None
-
+uploaded_file = None
 
 st.markdown(r"""```python
 # 接口api
@@ -113,6 +123,6 @@ if resp.status_code == 200:
         print(i)
 ```
 """)
-
+st.caption('有问题飞书@黎旭民@王宗超')
 # streamlit run show_server.py
 # nohup streamlit run show_server.py > show.log
